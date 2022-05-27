@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Creates a TinyPilot installation bundle from the dist/ folder.
+# Fetches all required dependencies automatically.
+
+# Exit on first error.
+set -e
+
+# Echo commands to stdout.
+set -x
+
+readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
+readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
+readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
+readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
+
+pushd dist
+
+git clone --depth 1 "${REPO_TINYPILOT}" tinypilot
+
+git clone "${REPO_ANSIBLE_TINYPILOT}" ansible-role-tinypilot
+# Use experimental branch with adjustments for this bundler.
+pushd ansible-role-tinypilot
+git checkout origin/experimental/with-bundler
+popd
+
+git clone --depth 1 "${REPO_ANSIBLE_NGINX}"
+
+git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
+
+for file in $(cat ../prodignore) ; do
+	find . -name "${file}" | xargs rm -rf
+done
+
+# Create build output.
+readonly OUT_FOLDER="$1"
+ls -lahR . > "${OUT_FOLDER}"/files.txt
+tar \
+	--create \
+	--file "${OUT_FOLDER}"/tinypilot.tar \
+	.

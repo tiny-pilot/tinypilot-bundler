@@ -1,0 +1,6 @@
+ustreamer_capture_device: tc358743
+ustreamer_encoder: omx
+ustreamer_format: uyvy
+ustreamer_workers: 3
+ustreamer_use_dv_timings: true
+ustreamer_drop_same_frames: 30
