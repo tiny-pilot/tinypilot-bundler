@@ -5,13 +5,15 @@
 Create build environment:
 
 ```bash
-docker build -t tinypilot-bundler .
+docker build --tag tinypilot-bundler .
 ```
 
 Run build:
 
 ```bash
-docker run --rm -it -v "${PWD}/out":/out tinypilot-bundler
+docker run --rm -it \
+  --volume "${PWD}/dist":/tinypilot-bundler/dist \
+  tinypilot-bundler
 ```
 
 ## Testing Procedure (Development)
@@ -19,9 +21,9 @@ docker run --rm -it -v "${PWD}/out":/out tinypilot-bundler
 (Note: this is currently only for installing TinyPilot Community on a Voyager device.)
 
 1. Run the build (see instructions above)
-2. Upload `out/tinypilot.tar` and `get-tinypilot.sh` to your device, e.g.:
+2. Upload `dist/tinypilot.tar` and `get-tinypilot.sh` to your device, e.g.:
    ```bash
-   rsync out/tinypilot.tar get-tinypilot.sh root@raspberrypi:/root
+   rsync dist/tinypilot.tar get-tinypilot.sh root@raspberrypi:/root
    ```
 3. SSH into your device and run the installation:
    ```bash

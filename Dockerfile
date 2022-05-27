@@ -11,6 +11,6 @@ RUN apt-get install -y \
 WORKDIR /tinypilot-bundler
 COPY ./ .
 
-RUN mkdir /out
+RUN mkdir -p dist
 
-ENTRYPOINT ["./bundle", "/out"]
+ENTRYPOINT ["./create-bundle"]
