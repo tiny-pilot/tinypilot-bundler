@@ -8,6 +8,7 @@ set -e
 # Echo commands to stdout.
 set -x
 
+# Bootstrap environment for installation.
 apt-get update --allow-releaseinfo-change-suite
 apt-get install -y \
   git \
@@ -21,7 +22,9 @@ python3 -m venv venv
 pip install pip==21.3.1
 pip install -r requirements.txt
 
-ansible-playbook -i localhost, install.yml \
+ansible-playbook \
+  --inventory localhost, \
+  install.yml \
   --extra-vars "@settings.voyager.yml"
 
 cp settings.voyager.yml /home/tinypilot/settings.yml

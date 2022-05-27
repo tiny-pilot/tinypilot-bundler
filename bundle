@@ -31,10 +31,10 @@ git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
 # Remove the `.git/` folders.
 find . -name ".git/" | xargs rm -rf
 
-# Create build output.
-readonly OUT_FOLDER="$1"
-ls -lahR . > "${OUT_FOLDER}"/files.txt
+# Generate build output.
+readonly OUTPUT_FOLDER="$1"
+ls -lahR . > "${OUTPUT_FOLDER}"/files.txt
 tar \
 	--create \
-	--file "${OUT_FOLDER}"/tinypilot.tar \
+	--file "${OUTPUT_FOLDER}"/tinypilot.tar \
 	.

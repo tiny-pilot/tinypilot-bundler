@@ -12,10 +12,12 @@ set -x
 
 readonly TEMP_FOLDER="$(mktemp -d)"
 
+# Extract tarball to temporary folder and run install.
 tar -xf tinypilot.tar -C "${TEMP_FOLDER}"
 pushd "${TEMP_FOLDER}"
 chmod +x install
 ./install
 popd
 
+# Clean up.
 rm -rf "${TEMP_FOLDER}"
