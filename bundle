@@ -28,9 +28,8 @@ git clone --depth 1 "${REPO_ANSIBLE_NGINX}"
 
 git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
 
-for file in $(cat ../prodignore) ; do
-	find . -name "${file}" | xargs rm -rf
-done
+# Remove the `.git/` folders.
+find . -name ".git/" | xargs rm -rf
 
 # Create build output.
 readonly OUT_FOLDER="$1"
