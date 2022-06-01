@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Installs the TinyPilot software.
+# Installs TinyPilot and all dependencies.
 
 # Exit on first error.
 set -e
