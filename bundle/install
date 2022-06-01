@@ -11,6 +11,12 @@ set -u
 # Echo commands to stdout.
 set -x
 
+. lib.sh
+
+readonly PERMANENT_TINYPILOT_SETTINGS_FILE='/home/tinypilot/settings.yml'
+readonly TINYPILOT_SETTINGS_FILE='settings.yml'
+readonly USTREAMER_SETTINGS_FILE='/home/ustreamer/config.yml'
+
 # Prevent installation on the 64-bit version of Raspberry Pi OS.
 # https://github.com/tiny-pilot/tinypilot/issues/929
 if [[ "$(uname -m)" == 'aarch64' && "$(lsb_release --id --short)" == 'Debian' ]]; then
@@ -18,6 +24,49 @@ if [[ "$(uname -m)" == 'aarch64' && "$(lsb_release --id --short)" == 'Debian' ]]
   echo 'Please use the 32-bit version of Raspberry Pi OS.' >&2
   exit 1
 fi
+
+# Check if there's already a settings file with extra installation settings.
+if [[ -f "${PERMANENT_TINYPILOT_SETTINGS_FILE}" ]]; then
+  echo "Using settings file at: ${PERMANENT_TINYPILOT_SETTINGS_FILE}"
+  cp "${PERMANENT_TINYPILOT_SETTINGS_FILE}" "${TINYPILOT_SETTINGS_FILE}"
+else
+  echo "No pre-existing settings file found at: ${PERMANENT_TINYPILOT_SETTINGS_FILE}"
+fi
+
+# Set default installation settings
+yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_port" "8001"
+yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_persistent" "true"
+
+# Check if this system uses the TC358743 HDMI to CSI capture bridge.
+USE_TC358743_DEFAULTS=false
+if grep --silent "^ustreamer_capture_device:" "${TINYPILOT_SETTINGS_FILE}"; then
+  if grep --silent "^ustreamer_capture_device: tc358743$" "${TINYPILOT_SETTINGS_FILE}"; then
+    USE_TC358743_DEFAULTS=true
+  fi
+# Only check the existing config file if user has not set
+# ustreamer_capture_device install variable.
+elif [ -f "${USTREAMER_SETTINGS_FILE}" ] \
+     && grep --silent 'capture_device: "tc358743"' "${USTREAMER_SETTINGS_FILE}"; then
+  USE_TC358743_DEFAULTS=true
+fi
+
+# Write uStreamer settings.
+if "${USE_TC358743_DEFAULTS}"; then
+    yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_encoder" "omx"
+    yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_format" "uyvy"
+    yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_workers" "3"
+    yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_use_dv_timings" "true"
+    yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_drop_same_frames" "30"
+else
+  # If this system does not use a TC358743 capture chip, assume defaults for a
+  # MacroSilicon MS2109-based HDMI-to-USB capture dongle.
+  yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_encoder" "hw"
+  yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_format" "jpeg"
+  yaml_set_if_undefined "${TINYPILOT_SETTINGS_FILE}" "ustreamer_resolution" "1920x1080"
+fi
+
+echo "Final install settings:"
+cat "${TINYPILOT_SETTINGS_FILE}"
 
 # Bootstrap environment for installation.
 apt-get update --allow-releaseinfo-change-suite
@@ -33,10 +82,12 @@ python3 -m venv venv
 pip install pip==21.3.1
 pip install -r requirements.txt
 
+# Run Ansible.
 ansible-playbook \
   --inventory localhost, \
   install.yml \
-  --extra-vars "@settings.voyager.yml"
+  --extra-vars "@${TINYPILOT_SETTINGS_FILE}"
 
-cp settings.voyager.yml /home/tinypilot/settings.yml
-chown tinypilot:tinypilot /home/tinypilot/settings.yml
+# Persist installation settings.
+cp "${TINYPILOT_SETTINGS_FILE}" "${PERMANENT_TINYPILOT_SETTINGS_FILE}"
+chown tinypilot:tinypilot "${PERMANENT_TINYPILOT_SETTINGS_FILE}"
