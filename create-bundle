@@ -36,9 +36,9 @@ git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
 # Remove the `.git/` folders.
 find . \
   -type d \
-  -print0 \
-  -name ".git" \
-  | xargs rm -rf
+  -name .git \
+  -prune \
+  -exec rm -rf {} \;
 
 popd
 
