@@ -31,7 +31,11 @@ git clone --depth 1 "${REPO_ANSIBLE_NGINX}"
 git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
 
 # Remove the `.git/` folders.
-find . -type d -name ".git" | xargs rm -rf
+find . \
+  -type d \
+  -print0 \
+  -name ".git" \
+  | xargs rm -rf
 
 popd
 

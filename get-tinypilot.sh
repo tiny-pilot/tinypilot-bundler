@@ -10,7 +10,8 @@ set -e
 # Echo commands to stdout.
 set -x
 
-readonly TEMP_FOLDER="$(mktemp -d)"
+TEMP_FOLDER="$(mktemp -d)"
+readonly TEMP_FOLDER
 
 # Extract tarball to temporary folder and run install.
 tar -xf tinypilot.tar -C "${TEMP_FOLDER}"
