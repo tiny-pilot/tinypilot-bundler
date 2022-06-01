@@ -7,6 +7,9 @@
 # Exit on first error.
 set -e
 
+# Exit on unset variable.
+set -u
+
 # Echo commands to stdout.
 set -x
 
