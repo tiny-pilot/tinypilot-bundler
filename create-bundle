@@ -13,7 +13,9 @@ set -u
 set -x
 
 readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
+readonly REPO_TINYPILOT_BRANCH='master'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
+readonly REPO_ANSIBLE_TINYPILOT_BRANCH='experimental/with-bundler'
 readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
 readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
 
@@ -21,19 +23,28 @@ readonly BUNDLE_DIR='bundle'
 
 pushd "${BUNDLE_DIR}"
 
-git clone --depth 1 "${REPO_TINYPILOT}" tinypilot
+git clone \
+  --depth 1 \
+  --branch "${REPO_TINYPILOT_BRANCH}" \
+  "${REPO_TINYPILOT}" tinypilot
 
-git clone "${REPO_ANSIBLE_TINYPILOT}" ansible-role-tinypilot
 # Use experimental branch with adjustments for this bundler.
-pushd ansible-role-tinypilot
-git checkout origin/experimental/with-bundler
-popd
+git clone \
+  --depth 1 \
+  --branch "${REPO_ANSIBLE_TINYPILOT_BRANCH}" \
+  "${REPO_ANSIBLE_TINYPILOT}" ansible-role-tinypilot
 
-git clone --depth 1 "${REPO_ANSIBLE_NGINX}"
+git clone \
+  --depth 1 \
+  --branch master \
+  "${REPO_ANSIBLE_NGINX}"
 
-git clone --depth 1 "${REPO_ANSIBLE_USTREAMER}"
+git clone \
+  --depth 1 \
+  --branch master \
+  "${REPO_ANSIBLE_USTREAMER}"
 
-# Remove the `.git/` folders.
+# Remove all `.git/` folders.
 find . \
   -type d \
   -name .git \
