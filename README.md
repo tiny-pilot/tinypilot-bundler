@@ -1,5 +1,7 @@
 # TinyPilot Bundler
 
+> ### 🚧🚧🚧 WORK IN PROGRESS 🚧🚧🚧
+
 ## Run Build via Docker
 
 Create build environment:
@@ -17,8 +19,6 @@ docker run --rm -it \
 ```
 
 ## Testing Procedure (Development)
-
-(Note: this is currently only for installing TinyPilot Community on a Voyager device.)
 
 1. Run the build (see instructions above)
 2. Upload `dist/tinypilot.tar` and `get-tinypilot.sh` to your device, e.g.:
