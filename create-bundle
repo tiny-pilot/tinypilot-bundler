@@ -12,8 +12,8 @@ set -u
 # Echo commands to stdout.
 set -x
 
-# TODO (jotaen): parametrize script to make the installation work for TinyPilot
-#                Pro as well.
+# TODO (jotaen): parameterize script to make the installation work for
+#                TinyPilot Pro as well.
 readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
 readonly REPO_TINYPILOT_BRANCH='master'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
