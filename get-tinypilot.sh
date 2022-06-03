@@ -18,9 +18,9 @@ readonly TEMP_FOLDER
 
 # Extract tarball to temporary folder and run install.
 tar \
-	--extract \
-	--file tinypilot.tar \
-	--directory "${TEMP_FOLDER}"
+  --extract \
+  --file tinypilot.tar \
+  --directory "${TEMP_FOLDER}"
 pushd "${TEMP_FOLDER}"
 chmod +x install
 ./install
