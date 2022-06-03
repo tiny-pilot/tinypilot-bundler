@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Creates a TinyPilot installation bundle from the bundle/ folder.
+# Fetches all required dependencies automatically.
+
+# Exit on first error.
+set -e
+
+# Exit on unset variable.
+set -u
+
+# Echo commands to stdout.
+set -x
+
+# TODO (jotaen): parameterize script to make the installation work for
+#                TinyPilot Pro as well.
+readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
+readonly REPO_TINYPILOT_BRANCH='master'
+readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
+# TODO (jotaen): point this to the main branch again, once the Ansible repo is
+#                properly adjusted to work with this bundler.
+readonly REPO_ANSIBLE_TINYPILOT_BRANCH='experimental/with-bundler'
+readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
+readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
+
+readonly BUNDLE_DIR='bundle'
+
+pushd "${BUNDLE_DIR}"
+
+git clone \
+  --depth 1 \
+  --branch "${REPO_TINYPILOT_BRANCH}" \
+  "${REPO_TINYPILOT}" tinypilot
+
+git clone \
+  --depth 1 \
+  --branch "${REPO_ANSIBLE_TINYPILOT_BRANCH}" \
+  "${REPO_ANSIBLE_TINYPILOT}" ansible-role-tinypilot
+
+git clone \
+  --depth 1 \
+  --branch master \
+  "${REPO_ANSIBLE_NGINX}"
+
+git clone \
+  --depth 1 \
+  --branch master \
+  "${REPO_ANSIBLE_USTREAMER}"
+
+# Remove all `.git/` folders.
+find . \
+  -type d \
+  -name .git \
+  -prune \
+  -exec rm -rf {} \;
+
+popd
+
+# Generate build output.
+ls -lahR "${BUNDLE_DIR}" > dist/files.txt
+tar \
+  --create \
+  --file dist/tinypilot.tar \
+  --directory "${BUNDLE_DIR}" \
+  .
