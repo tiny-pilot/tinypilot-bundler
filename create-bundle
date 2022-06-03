@@ -17,6 +17,8 @@ set -x
 readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
 readonly REPO_TINYPILOT_BRANCH='master'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
+# TODO (jotaen): point this to the main branch again, once the Ansible repo is
+#                properly adjusted to work with this bundler.
 readonly REPO_ANSIBLE_TINYPILOT_BRANCH='experimental/with-bundler'
 readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
 readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
@@ -30,7 +32,6 @@ git clone \
   --branch "${REPO_TINYPILOT_BRANCH}" \
   "${REPO_TINYPILOT}" tinypilot
 
-# Use experimental branch with adjustments for this bundler.
 git clone \
   --depth 1 \
   --branch "${REPO_ANSIBLE_TINYPILOT_BRANCH}" \
