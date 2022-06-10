@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:buster-20220527
 
 RUN apt-get update
 RUN apt-get install -y \
@@ -10,7 +10,5 @@ RUN apt-get install -y \
 
 WORKDIR /tinypilot-bundler
 COPY ./ .
-
-RUN mkdir -p dist
 
 ENTRYPOINT ["./create-bundle"]
