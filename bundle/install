@@ -93,6 +93,7 @@ ansible-playbook \
   --inventory localhost, \
   install.yml \
   --extra-vars "@${INSTALL_SETTINGS_FILE}"
+  --extra-vars "tinypilot_debian_package_path=${PWD}/tinypilot-1.7.1-1-armhf.deb"
 
 # Persist installation settings.
 cp "${INSTALL_SETTINGS_FILE}" "${TINYPILOT_SETTINGS_FILE}"
