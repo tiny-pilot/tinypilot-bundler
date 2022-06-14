@@ -88,15 +88,15 @@ python3 -m venv venv
 pip install pip==21.3.1
 pip install -r requirements.txt
 
-# TODO: Detect the Debian package version name automatically instead of
-# hardcoding it.
+TINYPILOT_DEBIAN_PACKAGE="$(ls tinypilot*.deb)"
+readonly TINYPILOT_DEBIAN_PACKAGE
 
 # Run Ansible.
 ansible-playbook \
   --inventory localhost, \
   install.yml \
   --extra-vars "@${INSTALL_SETTINGS_FILE}" \
-  --extra-vars "tinypilot_debian_package_path=${PWD}/tinypilot-1.7.1-1-armhf.deb"
+  --extra-vars "tinypilot_debian_package_path=${PWD}/${TINYPILOT_DEBIAN_PACKAGE}"
 
 # Persist installation settings.
 cp "${INSTALL_SETTINGS_FILE}" "${TINYPILOT_SETTINGS_FILE}"
