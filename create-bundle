@@ -16,7 +16,7 @@ set -x
 #                TinyPilot Pro as well.
 # TODO: Select the latest available version rather than hardcoding a specific
 #       package.
-readonly PKG_URL_TINYPILOT='https://bundles.tinypilotkvm.com/community/tinypilot-1.7.1-1-armhf.deb'
+readonly PKG_URL_TINYPILOT='https://packages.tinypilotkvm.com/community/tinypilot-1.7.1-1-armhf.deb'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
 readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
 readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
