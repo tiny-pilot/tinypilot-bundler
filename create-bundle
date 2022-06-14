@@ -18,8 +18,8 @@ set -x
 #       package.
 readonly PKG_URL_TINYPILOT='https://packages.tinypilotkvm.com/community/tinypilot-1.7.1-1-armhf.deb'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
-readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
-readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
+readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx.git'
+readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer.git'
 
 readonly BUNDLE_DIR='bundle'
 
@@ -27,20 +27,17 @@ pushd "${BUNDLE_DIR}"
 
 wget "${PKG_URL_TINYPILOT}"
 
-git clone \
-  --depth 1 \
-  --branch master \
-  "${REPO_ANSIBLE_TINYPILOT}"
-
-git clone \
-  --depth 1 \
-  --branch master \
-  "${REPO_ANSIBLE_NGINX}"
-
-git clone \
-  --depth 1 \
-  --branch master \
-  "${REPO_ANSIBLE_USTREAMER}"
+for $GIT_URL in $REPO_ANSIBLE_TINYPILOT $REPO_ANSIBLE_NGINX $REPO_ANSIBLE_USTREAMER
+do
+  git clone \
+    --depth 1 \
+    --branch master \
+    "${GIT_URL}"
+  FOLDER_NAME="$(echo "${REPO_ANSIBLE_NGINX}" | sed 's|https://github.com/tiny-pilot/||' | sed 's|.git||')"
+  pushd "${FOLDER_NAME}"
+  git rev-parse --short HEAD > VERSION
+  popd
+done
 
 # Remove all `.git/` folders.
 find . \
