@@ -14,8 +14,10 @@ set -x
 
 # TODO (jotaen): parameterize script to make the installation work for
 #                TinyPilot Pro as well.
-# TODO: Select the latest available version rather than hardcoding a specific
-#       package.
+
+# TODO: Adjust the workflow so that we build Debian packages as part of the same
+# workflow on the same system that we build the bundle so that we don't have to
+# retrieve the Debian package file from a remote URL.
 readonly PKG_URL_TINYPILOT='https://packages.tinypilotkvm.com/community/tinypilot-1.7.1-1-armhf.deb'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
 readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
