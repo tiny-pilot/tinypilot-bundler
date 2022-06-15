@@ -30,6 +30,7 @@ pushd "${BUNDLE_DIR}"
 
 wget "${PKG_URL_TINYPILOT}"
 
+# Copy each Ansible role dependency into the bundle and add a version file.
 for GIT_URL in $REPO_ANSIBLE_TINYPILOT $REPO_ANSIBLE_NGINX $REPO_ANSIBLE_USTREAMER
 do
   git clone \
