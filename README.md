@@ -4,22 +4,6 @@
 
 > ### 🚧🚧🚧 WORK IN PROGRESS 🚧🚧🚧
 
-## Run Build via Docker
-
-Create build environment:
-
-```bash
-docker build --tag tinypilot-bundler .
-```
-
-Run build:
-
-```bash
-docker run --rm -it \
-  --volume "${PWD}/dist":/tinypilot-bundler/dist \
-  tinypilot-bundler
-```
-
 ## Testing Procedure (Development)
 
 1. Run the build (see instructions above)
