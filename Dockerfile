@@ -6,7 +6,8 @@ RUN apt-get install -y \
   libffi-dev \
   libssl-dev \
   python3-dev \
-  python3-venv
+  python3-venv \
+  wget
 
 WORKDIR /tinypilot-bundler
 COPY ./ .

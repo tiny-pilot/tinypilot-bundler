@@ -22,6 +22,10 @@ readonly INSTALL_SETTINGS_FILE='settings.yml'
 readonly TINYPILOT_SETTINGS_FILE='/home/tinypilot/settings.yml'
 readonly USTREAMER_SETTINGS_FILE='/home/ustreamer/config.yml'
 
+# The filename of the TinyPilot Debian package.
+TINYPILOT_DEBIAN_PACKAGE="$(ls tinypilot*.deb)"
+readonly TINYPILOT_DEBIAN_PACKAGE
+
 # Prevent installation on the 64-bit version of Raspberry Pi OS.
 # https://github.com/tiny-pilot/tinypilot/issues/929
 if [[ "$(uname -m)" == 'aarch64' && "$(lsb_release --id --short)" == 'Debian' ]]; then
@@ -92,7 +96,8 @@ pip install -r requirements.txt
 ansible-playbook \
   --inventory localhost, \
   install.yml \
-  --extra-vars "@${INSTALL_SETTINGS_FILE}"
+  --extra-vars "@${INSTALL_SETTINGS_FILE}" \
+  --extra-vars "tinypilot_debian_package_path=${PWD}/${TINYPILOT_DEBIAN_PACKAGE}"
 
 # Persist installation settings.
 cp "${INSTALL_SETTINGS_FILE}" "${TINYPILOT_SETTINGS_FILE}"

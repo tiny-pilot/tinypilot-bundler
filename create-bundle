@@ -14,12 +14,12 @@ set -x
 
 # TODO (jotaen): parameterize script to make the installation work for
 #                TinyPilot Pro as well.
-readonly REPO_TINYPILOT='https://github.com/tiny-pilot/tinypilot.git'
-readonly REPO_TINYPILOT_BRANCH='master'
+
+# TODO: Adjust the workflow so that we build Debian packages as part of the same
+# workflow on the same system that we build the bundle so that we don't have to
+# retrieve the Debian package file from a remote URL.
+readonly PKG_URL_TINYPILOT='https://packages.tinypilotkvm.com/community/tinypilot-1.7.1-1-armhf.deb'
 readonly REPO_ANSIBLE_TINYPILOT='https://github.com/tiny-pilot/ansible-role-tinypilot.git'
-# TODO (jotaen): point this to the main branch again, once the Ansible repo is
-#                properly adjusted to work with this bundler.
-readonly REPO_ANSIBLE_TINYPILOT_BRANCH='experimental/with-bundler'
 readonly REPO_ANSIBLE_NGINX='https://github.com/tiny-pilot/ansible-role-nginx'
 readonly REPO_ANSIBLE_USTREAMER='https://github.com/tiny-pilot/ansible-role-ustreamer'
 
@@ -27,15 +27,12 @@ readonly BUNDLE_DIR='bundle'
 
 pushd "${BUNDLE_DIR}"
 
-git clone \
-  --depth 1 \
-  --branch "${REPO_TINYPILOT_BRANCH}" \
-  "${REPO_TINYPILOT}" tinypilot
+wget "${PKG_URL_TINYPILOT}"
 
 git clone \
   --depth 1 \
-  --branch "${REPO_ANSIBLE_TINYPILOT_BRANCH}" \
-  "${REPO_ANSIBLE_TINYPILOT}" ansible-role-tinypilot
+  --branch master \
+  "${REPO_ANSIBLE_TINYPILOT}"
 
 git clone \
   --depth 1 \
