@@ -1,3 +1,3 @@
 # TinyPilot Bundler
 
-[![CircleCI](https://circleci.com/gh/tiny-pilot/tinypilot-bundler/tree/master.svg?style=svg&circle-token=59e2a0bc53eb91b3eb05688c0d0f7f30a3e235e2)](https://circleci.com/gh/tiny-pilot/tinypilot-bundler/tree/master)
+This repo is obsolete. Its contents have been merged into tiny-pilot/tinypilot repo (see https://github.com/tiny-pilot/tinypilot/pull/986).
